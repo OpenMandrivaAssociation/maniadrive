@@ -7,7 +7,7 @@
 %define release  %mkrel 0.%{pre}.1
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 3
+%define release  %mkrel 4
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
@@ -76,15 +76,15 @@ ln -s /usr/src/php-devel/ext .
 %make
 for f in mania2 mania_drive mania_server; do
   # from odyncomp.sh
-  gcc $f.c -g -Wall -DFORCE_LIBRAYDIUM -DBINDIR=\"%{_gamesbindir}\" -DGAMEDIR=\"%{_gamesdatadir}/%{name}\" -o $f.static libraydium.so `php-config --includes`
+  gcc $f.c -g -Wall -DFORCE_LIBRAYDIUM -DBINDIR=\"%{_gamesbindir}\" %{optflags} -DGAMEDIR=\"%{_gamesdatadir}/%{name}\" -o $f.static libraydium.so `php-config --includes`
 done
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}
-install lib%{engine_name}.* $RPM_BUILD_ROOT%{_libdir}
+cp -a lib%{engine_name}.* $RPM_BUILD_ROOT%{_libdir}
 install -d $RPM_BUILD_ROOT%{_gamesbindir}
-install -m755 mania*.static $RPM_BUILD_ROOT%{_gamesbindir}/
+cp -a mania*.static $RPM_BUILD_ROOT%{_gamesbindir}/
 ln -s mania_drive.static $RPM_BUILD_ROOT%{_gamesbindir}/%{name}
 install -d $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}
 install -m644 *.php $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}/
@@ -118,5 +118,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_gamesdatadir}/%{name}/rayphp/*
 %{_datadir}/icons/%{name}.png
 %{_datadir}/applications/mandriva-%{name}.desktop
-
-
