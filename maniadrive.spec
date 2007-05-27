@@ -84,7 +84,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}
 cp -a lib%{engine_name}.* $RPM_BUILD_ROOT%{_libdir}
 install -d $RPM_BUILD_ROOT%{_gamesbindir}
-cp -a mania*.static $RPM_BUILD_ROOT%{_gamesbindir}/
+install -m755 mania*.static $RPM_BUILD_ROOT%{_gamesbindir}/
 ln -s mania_drive.static $RPM_BUILD_ROOT%{_gamesbindir}/%{name}
 install -d $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}
 install -m644 *.php $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}/
