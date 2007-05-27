@@ -7,7 +7,7 @@
 %define release  %mkrel 0.%{pre}.1
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 4
+%define release  %mkrel 5
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
@@ -82,7 +82,7 @@ done
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}
-cp -a lib%{engine_name}.* $RPM_BUILD_ROOT%{_libdir}
+cp -a lib%{engine_name}.so.* $RPM_BUILD_ROOT%{_libdir}
 install -d $RPM_BUILD_ROOT%{_gamesbindir}
 install -m755 mania*.static $RPM_BUILD_ROOT%{_gamesbindir}/
 ln -s mania_drive.static $RPM_BUILD_ROOT%{_gamesbindir}/%{name}
