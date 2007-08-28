@@ -95,7 +95,6 @@ install -D -m 644 %{SOURCE1} %{buildroot}%{_datadir}/icons/%{name}.png
 install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
-Encoding=UTF-8
 Name=ManiaDrive
 Comment=Arcade car game on acrobatic tracks
 Exec=soundwrapper %_gamesbindir/%{name}
