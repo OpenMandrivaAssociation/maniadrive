@@ -29,6 +29,7 @@ Patch5: ManiaDrive-1.2-src.fPIC.patch
 License: GPL
 Group: Games/Arcade
 Url: http://raydium.org/
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: curl-devel
 BuildRequires: jpeg-devel
 BuildRequires: libxinerama-devel
