@@ -7,7 +7,7 @@
 %define release  %mkrel 0.%{pre}.1
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 5
+%define release  %mkrel 6
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
@@ -80,24 +80,24 @@ for f in mania2 mania_drive mania_server; do
 done
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}
-cp -a lib%{engine_name}.so.* $RPM_BUILD_ROOT%{_libdir}
-install -d $RPM_BUILD_ROOT%{_gamesbindir}
-install -m755 mania*.static $RPM_BUILD_ROOT%{_gamesbindir}/
-ln -s mania_drive.static $RPM_BUILD_ROOT%{_gamesbindir}/%{name}
-install -d $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}
-install -m644 *.php $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}/
-cp -a rayphp $RPM_BUILD_ROOT%{_gamesdatadir}/%{name}/
+rm -rf %{buildroot}
+install -d %{buildroot}%{_libdir}
+cp -a lib%{engine_name}.so.* %{buildroot}%{_libdir}
+install -d %{buildroot}%{_gamesbindir}
+install -m755 mania*.static %{buildroot}%{_gamesbindir}/
+ln -s mania_drive.static %{buildroot}%{_gamesbindir}/%{name}
+install -d %{buildroot}%{_gamesdatadir}/%{name}
+install -m644 *.php %{buildroot}%{_gamesdatadir}/%{name}/
+cp -a rayphp %{buildroot}%{_gamesdatadir}/%{name}/
 
 install -D -m 644 %{SOURCE1} %{buildroot}%{_datadir}/icons/%{name}.png
 
 install -d %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/%{name}.desktop << EOF
 [Desktop Entry]
 Name=ManiaDrive
 Comment=Arcade car game on acrobatic tracks
-Exec=soundwrapper %_gamesbindir/%{name}
+Exec=soundwrapper %{_gamesbindir}/%{name}
 Icon=%{name}
 Terminal=false
 Type=Application
@@ -105,7 +105,7 @@ Categories=Game;ArcadeGame;X-MandrivaLinux-MoreApplications-Games-Arcade;
 EOF
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
@@ -116,4 +116,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_gamesdatadir}/%{name}/mania_*.php
 %{_gamesdatadir}/%{name}/rayphp/*
 %{_datadir}/icons/%{name}.png
-%{_datadir}/applications/mandriva-%{name}.desktop
+%{_datadir}/applications/%{name}.desktop
