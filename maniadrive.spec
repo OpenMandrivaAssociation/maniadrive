@@ -7,7 +7,7 @@
 %define release  %mkrel 0.%{pre}.1
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 8
+%define release  %mkrel 9
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
