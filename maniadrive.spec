@@ -4,7 +4,7 @@
 %define version 1.2
 %define pre 0
 %if %{pre}
-%define release  %mkrel 0.%{pre}.1
+%define release  %mkrel 0.%{pre}.2
 %define fullversion %{version}-%{pre}
 %else
 %define release  %mkrel 9
