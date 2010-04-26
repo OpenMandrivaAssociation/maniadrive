@@ -7,7 +7,7 @@
 %define release  %mkrel 0.%{pre}.2
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 9
+%define release  %mkrel 10
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
@@ -26,6 +26,8 @@ Patch1: ManiaDrive-1.1-src.dirs.patch
 Patch3: ManiaDrive-1.1-src.safemode.patch
 Patch4: ManiaDrive-1.1-src.home.patch
 Patch5: ManiaDrive-1.2-src.fPIC.patch
+Patch6: ManiaDrive-1.2-ode.patch
+Patch7: ManiaDrive-1.2-key.patch
 License: GPL
 Group: Games/Arcade
 Url: http://raydium.org/
@@ -42,6 +44,7 @@ BuildRequires: openal-devel
 Requires: maniadrive-data
 Conflicts: maniadrive-data < 1.01-3mdv2007.0
 Requires: php-curl
+Requires: php-ini
 Requires: php-soap
 Requires: php-zlib
 
@@ -66,6 +69,8 @@ computer), sound, ...
 %patch3 -p1 -b .safemode
 %patch4 -p1 -b .home
 %patch5 -p1 -b .fPIC
+%patch6 -p1
+%patch7 -p1
 
 # php weird stuff, borrowed from thttpd-php.spec
 cp /usr/src/php-devel/internal_functions.c .
@@ -84,13 +89,19 @@ rm -rf %{buildroot}
 install -d %{buildroot}%{_libdir}
 cp -a lib%{engine_name}.so.* %{buildroot}%{_libdir}
 install -d %{buildroot}%{_gamesbindir}
-install -m755 mania*.static %{buildroot}%{_gamesbindir}/
+install -m755 mania*.static %{buildroot}%{_gamesbindir}
 ln -s mania_drive.static %{buildroot}%{_gamesbindir}/%{name}
 install -d %{buildroot}%{_gamesdatadir}/%{name}
-install -m644 *.php %{buildroot}%{_gamesdatadir}/%{name}/
-cp -a rayphp %{buildroot}%{_gamesdatadir}/%{name}/
+install -m644 *.php %{buildroot}%{_gamesdatadir}/%{name}
+
+cp -a rayphp %{buildroot}%{_gamesdatadir}/%{name}
 
 install -D -m 644 %{SOURCE1} %{buildroot}%{_datadir}/icons/%{name}.png
+
+# https://qa.mandriva.com/show_bug.cgi?id=37748
+rm -f %{buildroot}%{_gamesdatadir}/%{name}/php.ini
+ln -sf %{_sysconfdir}/php.ini %{buildroot}%{_gamesdatadir}/%{name}/php.ini
+ln -sf %{_gamesdatadir}/%{name}/rayphp %{buildroot}%{_gamesdatadir}/%{name}/rayphp/rayphp
 
 install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/%{name}.desktop << EOF
@@ -113,6 +124,7 @@ rm -rf %{buildroot}
 %{_gamesbindir}/mania*.static
 %{_libdir}/lib%{engine_name}.*
 %dir %{_gamesdatadir}/%{name}/rayphp
+%{_gamesdatadir}/%{name}/php.ini
 %{_gamesdatadir}/%{name}/mania_*.php
 %{_gamesdatadir}/%{name}/rayphp/*
 %{_datadir}/icons/%{name}.png
