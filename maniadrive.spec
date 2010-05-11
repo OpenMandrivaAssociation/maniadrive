@@ -7,7 +7,7 @@
 %define release  %mkrel 0.%{pre}.2
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 10
+%define release  %mkrel 11
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
@@ -43,6 +43,7 @@ BuildRequires: freealut-devel
 BuildRequires: openal-devel
 Requires: maniadrive-data
 Conflicts: maniadrive-data < 1.01-3mdv2007.0
+Requires: glxinfo
 Requires: php-curl
 Requires: php-ini
 Requires: php-soap
@@ -90,7 +91,17 @@ install -d %{buildroot}%{_libdir}
 cp -a lib%{engine_name}.so.* %{buildroot}%{_libdir}
 install -d %{buildroot}%{_gamesbindir}
 install -m755 mania*.static %{buildroot}%{_gamesbindir}
-ln -s mania_drive.static %{buildroot}%{_gamesbindir}/%{name}
+
+# This may not be required on future versions of the intel dri driver
+# Previously, %{_gamesbindir}/%{name} was a symlink to %{_gamesbindir}/mania_drive.static
+# https://bugs.freedesktop.org/show_bug.cgi?id=28002
+# https://bugs.freedesktop.org/show_bug.cgi?id=28069
+cat > %{buildroot}%{_gamesbindir}/%{name} << EOF
+\`glxinfo | grep -q 'OpenGL renderer string: Mesa'\` && export LIBGL_ALWAYS_INDIRECT=true
+exec %{_gamesbindir}/mania_drive.static "\$@"
+EOF
+chmod +x %{buildroot}%{_gamesbindir}/%{name}
+
 install -d %{buildroot}%{_gamesdatadir}/%{name}
 install -m644 *.php %{buildroot}%{_gamesdatadir}/%{name}
 
