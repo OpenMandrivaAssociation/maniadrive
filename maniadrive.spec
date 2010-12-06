@@ -4,10 +4,10 @@
 %define version 1.2
 %define pre 0
 %if %{pre}
-%define release  %mkrel 0.%{pre}.2
+%define release  %mkrel 0.%{pre}.3
 %define fullversion %{version}-%{pre}
 %else
-%define release  %mkrel 11
+%define release  %mkrel 12
 %define fullversion %{version}
 %endif
 %define distname %{rname}-%{fullversion}-src
