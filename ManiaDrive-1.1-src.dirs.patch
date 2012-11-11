@@ -1,0 +1,40 @@
+--- ManiaDrive-1.1-src/mania_drive.c.dirs	2006-08-17 15:36:04.000000000 +0200
++++ ManiaDrive-1.1-src/mania_drive.c	2006-08-31 15:39:13.000000000 +0200
+@@ -2492,6 +2492,7 @@
+ int mode;
+ 
+ raydium_init_args_name(argc,argv,"mania_drive");
++chdir(GAMEDIR);
+ 
+ raydium_parser_db_get("ManiaDrive-Windowed",str,"0");
+ windowed_mode=atoi(str);
+--- ManiaDrive-1.1-src/mania2.c.dirs	2006-08-17 15:36:32.000000000 +0200
++++ ManiaDrive-1.1-src/mania2.c	2006-08-31 15:38:34.000000000 +0200
+@@ -15,7 +15,7 @@
+ #ifdef WIN32
+ #define MANIA_BINARY "mania_drive.exe"
+ #else
+-#define MANIA_BINARY "./mania_drive.static"
++#define MANIA_BINARY BINDIR "/mania_drive.static"
+ #endif
+ 
+ 
+@@ -1027,6 +1027,7 @@
+ current_track[0]=0;
+ 
+ raydium_init_args_name(argc,argv,"mania_drive");
++chdir(GAMEDIR);
+ 
+ raydium_window_create(700,700,RAYDIUM_RENDERING_WINDOW,window);
+ 
+diff -p -up ManiaDrive-1.2-src/mania_server.c.orig ManiaDrive-1.2-src/mania_server.c
+--- ManiaDrive-1.2-src/mania_server.c.orig	2010-04-26 16:47:33.166195063 -0300
++++ ManiaDrive-1.2-src/mania_server.c	2010-04-26 16:48:11.258194870 -0300
+@@ -190,6 +190,7 @@ int main(int argc, char **argv)
+ int i;
+ char title[RAYDIUM_MAX_NAME_LEN];
+ 
++chdir(GAMEDIR);
+ raydium_network_only_init(argc,argv);
+ 
+ raydium_web_init();

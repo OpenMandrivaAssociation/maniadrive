@@ -1,0 +1,97 @@
+Index: ostatcomp.sh
+===================================================================
+--- ostatcomp.sh	(révision 391)
++++ ostatcomp.sh	(copie de travail)
+@@ -3,19 +3,22 @@
+ # Small and ugly "full static compiler" for Raydium apps, with ODE
+ # Use "./ostatcomp.sh test6.c" for example.
+ 
++CFLAGS="`php-config --includes` -I/usr/include/php/ext/standard -I/usr/include/ode"
++OTHER_LIBS="-lode -lphp5_common internal_functions.o"
++
+ # Warning, with GLEW 1.3.4, you must install libGLEW.a by hand, since
+ # the official Makefile is broken and strips this file during the make install
+ 
+ ulimit -c 0
+ rm test
+ gcc -g $1 -Wall -o test \
+--Wl,-dynamic-linker=/lib/ld-linux.so.2 -Wl,-Bstatic -L/usr/X11R6/lib/ \
+--lm -lXi -lstdc++ -ljpeg \
+--Iraydium/ode/include/ raydium/ode/lib/libode.a \
+--lGLEW -lXmu -lXinerama -lopenal -lalut -lvorbisfile -lvorbis -logg \
+--Iraydium/php/ -Iraydium/php/main/ -Iraydium/php/Zend -Iraydium/php/TSRM raydium/php/libs/libphp5.a \
++-L/usr/X11R6/lib/ \
++-lm -lstdc++ -ljpeg \
++-Iraydium/ode/include/ \
++-lGLEW -lXmu -lXinerama -lopenal -lvorbisfile -lvorbis -logg \
++$CFLAGS \
+ -lcrypt -lssl -lcrypto -lidn -lresolv -lz -lcurl -lxml2 -lssl -lcrypto -lidn \
+--Wl,-Bdynamic -lGL -lGLU -lasound -lpthread
++-Wl,-Bdynamic -lGL -lGLU -lasound -lpthread $OTHER_LIBS
+ # Strange thing above : -lssl -lcrypto must appear twice arround -lcurl ...
+ sync
+ shift
+Index: Makefile
+===================================================================
+--- Makefile	(révision 391)
++++ Makefile	(copie de travail)
+@@ -7,10 +7,11 @@
+ AR = ar
+ RANLIB = ranlib
+ SYSTEM_LIBS =  -lGL -lGLU -lXinerama -lm -ljpeg -lopenal -lalut -lvorbis -lvorbisfile -logg -lresolv -lcrypt -lz -lcurl -lxml2 -lGLEW
+-OTHER_LIBS =  raydium/ode/lib/libode.a raydium/php/libs/libphp5.a
++OTHER_LIBS=-lode -lphp5_common
+ INCLUDE_PATH =  -Iraydium/ode/include/ -Iraydium/php/ -Iraydium/php/include -Iraydium/php/main/ -Iraydium/php/Zend -Iraydium/php/TSRM -I/usr/include/curl
+ LIBS_PATH =  -L/usr/X11R6/lib/
+ CFLAGS=-Wall
++CFLAGS += `php-config --includes` -I/usr/include/php/ext/standard -I/usr/include/ode `xml2-config --cflags` -I.
+ COMPILE_OPTIONS=-g -D LIBRAY
+ LDFLAGS=
+ LINKING_OPTIONS=-Wl,-soname,libraydium.so.0
+@@ -19,7 +20,7 @@
+ 
+ HEADERS=raydium/headers/background.h raydium/headers/callback.h raydium/headers/camera.h raydium/headers/capture.h raydium/headers/clear.h raydium/headers/console.h raydium/headers/file.h raydium/headers/file_tri.h raydium/headers/fog.h raydium/headers/init.h raydium/headers/cli.h raydium/headers/internal.h raydium/headers/joy.h raydium/headers/key.h raydium/headers/land.h raydium/headers/light.h raydium/headers/log.h raydium/headers/main.h raydium/headers/mouse.h raydium/headers/network.h raydium/headers/normal.h raydium/headers/object.h raydium/headers/ode.h raydium/headers/osd.h raydium/headers/parser.h raydium/headers/particle2.h raydium/headers/php.h raydium/headers/profile.h raydium/headers/random.h raydium/headers/rayphp.h raydium/headers/register.h raydium/headers/render.h raydium/headers/signal.h raydium/headers/sky.h raydium/headers/sound.h raydium/headers/texture.h raydium/headers/timecall.h raydium/headers/trigo.h raydium/headers/vertex.h raydium/headers/window.h raydium/headers/reg_api.h raydium/headers/gui.h raydium/headers/live.h raydium/headers/video.h raydium/headers/shadow.h raydium/headers/myglut.h raydium/headers/web.h raydium/headers/hdr.h raydium/headers/shader.h raydium/headers/atexit.h raydium/headers/path.h
+ 
+-OBJECTS      = $(HEADERS:raydium/headers/%.h=raydium/compile/%.o)
++OBJECTS      = $(HEADERS:raydium/headers/%.h=raydium/compile/%.o) internal_functions.o
+ 
+ all: libraydium.a libraydium.so
+ 	@echo "Files created: $+"
+Index: odyncomp.sh
+===================================================================
+--- odyncomp.sh	(révision 391)
++++ odyncomp.sh	(copie de travail)
+@@ -17,7 +17,7 @@
+ 
+ rm test
+ $CC $1 -g -Wall -DFORCE_LIBRAYDIUM -o test libraydium.so \
+--Iraydium/php/ -Iraydium/php/main/ -Iraydium/php/Zend -Iraydium/php/TSRM -Iraydium/ode/include/
++`php-config --includes`
+ sync
+ export LD_LIBRARY_PATH=.
+ shift
+Index: raydium/rayphp.c
+===================================================================
+--- raydium/rayphp.c	(révision 391)
++++ raydium/rayphp.c	(copie de travail)
+@@ -7,6 +7,7 @@
+ #ifndef DONT_INCLUDE_HEADERS
+ #include "index.h"
+ #else
++#include "headers/file.h"
+ #include "headers/rayphp.h"
+ #endif 
+ 
+Index: raydium/ode.h
+===================================================================
+--- raydium/ode.h	(révision 391)
++++ raydium/ode.h	(copie de travail)
+@@ -11,7 +11,7 @@
+ // ugly workaround to avoid odemath.h ...
+ #define _ODE_ODEMATH_H_
+ #endif
+-#include "../ode/include/ode/ode.h"
++#include "ode/ode.h"
+ 
+ #define RAYDIUM_ODE_MAX_OBJECTS			64
+ #define RAYDIUM_ODE_MAX_ELEMENTS		256

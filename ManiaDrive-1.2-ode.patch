@@ -1,0 +1,12 @@
+diff -p -up ManiaDrive-1.2-src/raydium/ode.c.orig ManiaDrive-1.2-src/raydium/ode.c
+--- ManiaDrive-1.2-src/raydium/ode.c.orig	2010-04-26 15:13:11.997192958 -0300
++++ ManiaDrive-1.2-src/raydium/ode.c	2010-04-26 15:18:11.327192327 -0300
+@@ -149,6 +149,8 @@ if(sizeof(dReal) != sizeof(float))
+     exit(34);
+     }
+ 
++    dInitODE();
++
+ raydium_ode_ExplosionCallback=NULL;
+ raydium_ode_CollideCallback=NULL;
+ raydium_ode_RayCallback=NULL;

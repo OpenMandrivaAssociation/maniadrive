@@ -1,0 +1,26 @@
+diff -p -up ManiaDrive-1.2-src/raydium/key.c.orig ManiaDrive-1.2-src/raydium/key.c
+--- ManiaDrive-1.2-src/raydium/key.c.orig	2010-04-26 18:37:01.460196031 -0300
++++ ManiaDrive-1.2-src/raydium/key.c	2010-04-26 18:46:29.948192972 -0300
+@@ -26,11 +26,11 @@ int i;
+ key%=65536;
+ 
+ // key below esc :
+-// 178 (ex: fr), 176 (ex: us), 186 (ex: spa)
+-if(key==178 || key==176 || key==186) raydium_console_event();
++// backquote	178 (ex: fr), 176 (ex: us), 186 (ex: spa)
++if(key == 96 || key==178 || key==176 || key==186) raydium_console_event();
+ if(key==126) raydium_capture_frame_auto(); // glut@w32 won't return this key...
+ 
+-if(raydium_console_pos && ( (key>=32 && key<127) 
++if(raydium_console_pos && key != 96 && ( (key>=32 && key<127) 
+ 		       || key==8 
+ 		       || key==9 
+ 		       || key==13) )
+@@ -51,6 +51,7 @@ if(raydium_console_pos && ( (key>=32 &&
+   raydium_console_line_add("%s",raydium_console_get_string);
+   raydium_console_get_string[0]=0;
+   raydium_console_exec_last_command();
++  raydium_console_get_string_last[0]=0;
+   return;
+   }
+  

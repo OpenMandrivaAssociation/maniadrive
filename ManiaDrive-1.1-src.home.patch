@@ -1,0 +1,11 @@
+--- ManiaDrive-1.1-src/mania_drive.c.home	2006-09-03 13:03:39.000000000 +0200
++++ ManiaDrive-1.1-src/mania_drive.c	2006-09-03 13:35:33.000000000 +0200
+@@ -922,7 +922,7 @@
+ float pos;
+ FILE *fp;
+ 
+-strcpy(file,filename);
++raydium_file_home_path_cpy(filename, file);
+ 
+ fp=raydium_file_fopen(file,"rt");
+ if(!fp) 
