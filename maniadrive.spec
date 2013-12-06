@@ -83,7 +83,7 @@ ln -s /usr/src/php-devel/ext .
 %make
 for f in mania2 mania_drive mania_server; do
   # from odyncomp.sh
-  gcc $f.c -g -Wall -DFORCE_LIBRAYDIUM -DBINDIR=\"%{_gamesbindir}\" %{optflags} -DGAMEDIR=\"%{_gamesdatadir}/%{name}\" -o $f.static libraydium.so -lphp5_common -lGL `php-config --includes`
+  gcc $f.c -g -Wall -DFORCE_LIBRAYDIUM -DBINDIR=\"%{_gamesbindir}\" %{optflags} -DGAMEDIR=\"%{_gamesdatadir}/%{name}\" -o $f.static libraydium.so -lphp5_common -lGL -lm `php-config --includes`
 done
 
 %install
