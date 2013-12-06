@@ -21,6 +21,7 @@ Release: %{release}
 # svn export svn://raydium.org/raydium/trunk raydium-svn`date +%Y%m%d`
 Source0: %{distname}.tar.bz2
 Source1: %{name}.png
+Source2: maniadrive.rpmlintrc
 Patch0: raydium-1.01-svn20060728-build.patch
 Patch1: ManiaDrive-1.1-src.dirs.patch
 Patch3: ManiaDrive-1.1-src.safemode.patch
