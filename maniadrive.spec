@@ -34,10 +34,10 @@ Url: http://raydium.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: curl-devel
 BuildRequires: jpeg-devel
-BuildRequires: libxinerama-devel
+BuildRequires: pkgconfig(xinerama)
 BuildRequires: php-devel
 BuildRequires: ode-devel
-BuildRequires: oggvorbis-devel
+BuildRequires: pkgconfig(vorbis)
 BuildRequires: glew-devel
 BuildRequires: freealut-devel
 BuildRequires: openal-devel
