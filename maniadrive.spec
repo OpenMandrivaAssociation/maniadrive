@@ -41,6 +41,7 @@ BuildRequires: pkgconfig(vorbis)
 BuildRequires: glew-devel
 BuildRequires: freealut-devel
 BuildRequires: openal-devel
+BuildRequires: pkgconfig(libv4l1)
 Requires: maniadrive-data
 Conflicts: maniadrive-data < 1.01-3mdv2007.0
 Requires: glxinfo
