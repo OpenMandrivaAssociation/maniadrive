@@ -95,3 +95,15 @@ Index: raydium/ode.h
  
  #define RAYDIUM_ODE_MAX_OBJECTS			64
  #define RAYDIUM_ODE_MAX_ELEMENTS		256
+--- raydium/live.h~	2011-02-13 17:38:34.000000000 +0100
++++ raydium/live.h	2011-02-13 17:38:53.111753000 +0100
+@@ -13,8 +13,7 @@
+ #define LIVE_H
+ 
+ #ifndef WIN32
+-#include <linux/types.h>
+-#include <linux/videodev.h>
++#include <libv4l1.h>
+ #include <sys/mman.h>
+ #endif
+ 
