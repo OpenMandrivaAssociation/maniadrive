@@ -4,7 +4,7 @@
  int mode;
  
  raydium_init_args_name(argc,argv,"mania_drive");
-+chdir(GAMEDIR);
++chdir(GAMEDIR); raydium_log("Gamedir %s\n", GAMEDIR);
  
  raydium_parser_db_get("ManiaDrive-Windowed",str,"0");
  windowed_mode=atoi(str);
@@ -23,7 +23,7 @@
  current_track[0]=0;
  
  raydium_init_args_name(argc,argv,"mania_drive");
-+chdir(GAMEDIR);
++chdir(GAMEDIR); raydium_log("Gamedir %s\n", GAMEDIR);
  
  raydium_window_create(700,700,RAYDIUM_RENDERING_WINDOW,window);
  
@@ -34,7 +34,7 @@ diff -p -up ManiaDrive-1.2-src/mania_server.c.orig ManiaDrive-1.2-src/mania_serv
  int i;
  char title[RAYDIUM_MAX_NAME_LEN];
  
-+chdir(GAMEDIR);
++chdir(GAMEDIR); raydium_log("Gamedir %s\n", GAMEDIR);
  raydium_network_only_init(argc,argv);
  
  raydium_web_init();

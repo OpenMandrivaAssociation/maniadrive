@@ -29,6 +29,7 @@ Patch4: ManiaDrive-1.1-src.home.patch
 Patch5: ManiaDrive-1.2-src.fPIC.patch
 Patch6: ManiaDrive-1.2-ode.patch
 Patch7: ManiaDrive-1.2-key.patch
+Patch8:	maniadrive-1.2-fix-modifying-php-strings-inline.patch
 License: GPL
 Group: Games/Arcade
 Url: http://raydium.org/
@@ -70,10 +71,11 @@ computer), sound, ...
 %patch0 -p0 -b .build
 %patch1 -p1 -b .dirs
 %patch3 -p1 -b .safemode
-%patch4 -p1 -b .home
+#patch4 -p1 -b .home
 %patch5 -p1 -b .fPIC
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # php weird stuff, borrowed from thttpd-php.spec
 cp /usr/src/php-devel/internal_functions.c .
@@ -82,9 +84,10 @@ ln -s /usr/src/php-devel/ext .
 
 %build
 %make
+
 for f in mania2 mania_drive mania_server; do
   # from odyncomp.sh
-  gcc $f.c -g -Wall -DFORCE_LIBRAYDIUM -DBINDIR=\"%{_gamesbindir}\" %{optflags} -DGAMEDIR=\"%{_gamesdatadir}/%{name}\" -o $f.static libraydium.so -lphp5_common -lGL -lm `php-config --includes`
+  gcc $f.c -g -Wall -DFORCE_LIBRAYDIUM %{optflags} -DBINDIR='"%{_gamesbindir}"' -DGAMEDIR='"%{_gamesdatadir}/%{name}"' -o $f.static libraydium.so -lphp5_common -lGL -lm `php-config --includes`
 done
 
 %install
