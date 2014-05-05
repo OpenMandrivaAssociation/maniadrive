@@ -1,57 +1,44 @@
-%define name maniadrive
 %define rname ManiaDrive
 %define engine_name raydium
-%define version 1.2
-%define pre 0
-%if %{pre}
-%define release  0.%{pre}.3
-%define fullversion %{version}-%{pre}
-%else
-%define release  14
-%define fullversion %{version}
-%endif
-%define distname %{rname}-%{fullversion}-src
+
 %define major 0
-%define libname %mklibname %{name} %{major}
+%define libname %mklibname %{engine_name} %{major}
 
-Summary: Arcade car game on acrobatic tracks
-Name: %{name}
-Version: %{version}
-Release: %{release}
+Summary:	Arcade car game on acrobatic tracks
+Name:		maniadrive
+Version:	1.2
+Release:	15
+License:	GPLv2+
+Group:		Games/Arcade
+Url:		http://raydium.org/
 # svn export svn://raydium.org/raydium/trunk raydium-svn`date +%Y%m%d`
-Source0: %{distname}.tar.bz2
-Source1: %{name}.png
-Source2: maniadrive.rpmlintrc
-Patch0: raydium-1.01-svn20060728-build.patch
-Patch1: ManiaDrive-1.1-src.dirs.patch
-Patch3: ManiaDrive-1.1-src.safemode.patch
-Patch4: ManiaDrive-1.1-src.home.patch
-Patch5: ManiaDrive-1.2-src.fPIC.patch
-Patch6: ManiaDrive-1.2-ode.patch
-Patch7: ManiaDrive-1.2-key.patch
-Patch8:	maniadrive-1.2-fix-modifying-php-strings-inline.patch
-License: GPL
-Group: Games/Arcade
-Url: http://raydium.org/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: curl-devel
-BuildRequires: jpeg-devel
-BuildRequires: pkgconfig(xinerama)
-BuildRequires: php-devel
-BuildRequires: ode-devel
-BuildRequires: pkgconfig(vorbis)
-BuildRequires: glew-devel
-BuildRequires: freealut-devel
-BuildRequires: openal-devel
-BuildRequires: pkgconfig(libv4l1)
-Requires: maniadrive-data
-Conflicts: maniadrive-data < 1.01-3mdv2007.0
-Requires: glxinfo
-Requires: php-curl
-Requires: php-ini
-Requires: php-soap
-Requires: php-zlib
-
+Source0:	%{rname}-%{version}-src.tar.bz2
+Source1:	%{name}.png
+Source2:	maniadrive.rpmlintrc
+Patch0:		raydium-1.01-svn20060728-build.patch
+Patch1:		ManiaDrive-1.1-src.dirs.patch
+Patch3:		ManiaDrive-1.1-src.safemode.patch
+Patch4:		ManiaDrive-1.1-src.home.patch
+Patch5:		ManiaDrive-1.2-src.fPIC.patch
+Patch6:		ManiaDrive-1.2-ode.patch
+Patch7:		ManiaDrive-1.2-key.patch
+Patch8:		maniadrive-1.2-fix-modifying-php-strings-inline.patch
+BuildRequires:	jpeg-devel
+BuildRequires:	php-devel
+BuildRequires:	pkgconfig(freealut)
+BuildRequires:	pkgconfig(glew)
+BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(libv4l1)
+BuildRequires:	pkgconfig(ode)
+BuildRequires:	pkgconfig(openal)
+BuildRequires:	pkgconfig(vorbis)
+BuildRequires:	pkgconfig(xinerama)
+Requires:	maniadrive-data
+Requires:	glxinfo
+Requires:	php-curl
+Requires:	php-ini
+Requires:	php-soap
+Requires:	php-zlib
 
 %description
 ManiaDrive is a free clone of Trackmania, the great game from Nadéo
@@ -66,8 +53,33 @@ joypad, force feedback), rendering (3D objets, OSD (On Screen
 Display)), time (a game must run at the exact same speed on every
 computer), sound, ...
 
+%files
+%{_gamesbindir}/%{name}
+%{_gamesbindir}/mania*.static
+%dir %{_gamesdatadir}/%{name}/rayphp
+%{_gamesdatadir}/%{name}/php.ini
+%{_gamesdatadir}/%{name}/mania_*.php
+%{_gamesdatadir}/%{name}/rayphp/*
+%{_datadir}/icons/%{name}.png
+%{_datadir}/applications/%{name}.desktop
+
+#----------------------------------------------------------------------------
+
+%package -n %{libname}
+Summary:	Shared library for %{name}
+Group:		System/Libraries
+Conflicts:	%{name} < 1.2-15
+
+%description -n %{libname}
+Shared library for %{name}.
+
+%files -n %{libname}
+%{_libdir}/lib%{engine_name}.so.%{major}*
+
+#----------------------------------------------------------------------------
+
 %prep
-%setup -q -n %{distname}
+%setup -q -n %{rname}-%{version}-src
 %patch0 -p0 -b .build
 %patch1 -p1 -b .dirs
 %patch3 -p1 -b .safemode
@@ -91,7 +103,6 @@ for f in mania2 mania_drive mania_server; do
 done
 
 %install
-rm -rf %{buildroot}
 install -d %{buildroot}%{_libdir}
 cp -a lib%{engine_name}.so.* %{buildroot}%{_libdir}
 install -d %{buildroot}%{_gamesbindir}
@@ -128,20 +139,6 @@ Exec=soundwrapper %{_gamesbindir}/%{name}
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=Game;ArcadeGame;X-MandrivaLinux-MoreApplications-Games-Arcade;
+Categories=Game;ArcadeGame;
 EOF
 
-%clean
-rm -rf %{buildroot}
-
-%files
-%defattr(-,root,root)
-%{_gamesbindir}/%{name}
-%{_gamesbindir}/mania*.static
-%{_libdir}/lib%{engine_name}.*
-%dir %{_gamesdatadir}/%{name}/rayphp
-%{_gamesdatadir}/%{name}/php.ini
-%{_gamesdatadir}/%{name}/mania_*.php
-%{_gamesdatadir}/%{name}/rayphp/*
-%{_datadir}/icons/%{name}.png
-%{_datadir}/applications/%{name}.desktop
