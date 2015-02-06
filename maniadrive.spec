@@ -7,7 +7,7 @@
 Summary:	Arcade car game on acrobatic tracks
 Name:		maniadrive
 Version:	1.2
-Release:	15
+Release:	16
 License:	GPLv2+
 Group:		Games/Arcade
 Url:		http://raydium.org/
