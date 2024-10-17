@@ -10,7 +10,7 @@ Version:	1.2
 Release:	17
 License:	GPLv2+
 Group:		Games/Arcade
-Url:		http://raydium.org/
+Url:		https://raydium.org/
 # svn export svn://raydium.org/raydium/trunk raydium-svn`date +%Y%m%d`
 Source0:	%{rname}-%{version}-src.tar.bz2
 Source1:	%{name}.png
